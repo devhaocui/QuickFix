@@ -1,35 +1,21 @@
 # README
 
 ## Tech Stack
-This project uses a Vue frontend, a Django backend, and SQlite for the database currently.
+FrontEnd: Vue.js + Vite | Shadcn-vue w/ VeeValidate | Javascript/Typescript
+Backend: Express.js | Bcrypt | SQLite
 
 ## Setup
-1. Install `pnpm` if you do not have it installed. If you have `npm` try `npm install pnpm`
+Frontend:
+1. Install `pnpm`
+2. goto directory of `Frontend`, run command `pnpm install` to install package
 
-2. For the frontend, `pnpm` is the package manager and may need to run `pnpm install` in the frontend directory for Vue/Vite. Using npm and pnpm in the same project is not advised.
+## Backend
+1. Install express using `pnpm install express`
+2. Install Bcrypt using `pnpm install bcrypt`
+3. (Optional) Install Nodemon `pnpm install nodemon` for auto server restart upon detecting server file changes.
 
-For the backend, `uv` is the python package manager. 
-1. Run the `uv sync` command and all backend dependencies should be handled.
-2. It is also strongly recommended to run the `uv run python manage.py migrate` command.
-
-## Backend Stuff
-- To create an admin user for database managerment, `uv run python manage.py createsuperuser`. It will prompt for username, email, and password but they can be throwaway. You can then log into the admin backend with http://127.0.0.1:8000/admin and view users and profiles.
-- The frontend url that is being used to test stuff is http://localhost:5173/#/Hello. Right now, it is the user sign up page.
-
-## Deployment
-Create two terminals, one for the frontend and one for the backend.
-
-For the frontend, launch the server with `npm run dev`. You should follow the link to open the site in your browser at host.
-
-For the backend, launch the server with `uv run python manage.py runserver`.
-
-To test the connection between the two servers, navigate to http://127.0.0.1:5173/#/hello and you should see a message from the backend. Note that if you do not launch the backend server, the message will not appear which confirms the connection.
+## Usage
+1. Goto `Frontend` directory, run command `pnpm dev`. You should be able to go on the Localhost with any web browser. URL is `http://localhost:5173`
+2. Goto `Backend` directory, run command `nodemon app.js` or if you didn't install Nodemon use `node app.js` to start the server.
 
 ## TODO
-- database models
-- api expansion
-- frontend stuff
-- everything
-
-## Note
-- any time you pull or get an updated files you may need to install additional packages with `npm install` or `pnpm install`
