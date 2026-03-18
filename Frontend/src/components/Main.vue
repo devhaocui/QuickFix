@@ -42,7 +42,7 @@ function selectjob(item) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center ">
+  <div class="flex flex-col items-center">
     <main class="min-h-screen w-full flex flex-col items-center gap-16 text-green-800">
       <h1 class="text-5xl font-bold">Get the job done today.</h1>
       <h1 class="text-5xl font-bold">No hassle.</h1>

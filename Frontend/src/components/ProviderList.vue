@@ -73,35 +73,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { faker } from '@faker-js/faker';
 import { Badge } from '@/components/ui/badge'
 import Provider from '@/components/Provider.vue'
+import { userList } from '@/store/userList'
+import { storeToRefs } from 'pinia'
 
-//NOTE: these data needs to be grabbed from the backend.
-//right now averageRating cannot easily be computed on it's own
-//since it cannot calculate within something to be initialized
-//at the same time.
-const generateProvider = () => {
-  const jobsCompleted = faker.number.int(150)
-  return {
-    name: faker.person.fullName(),
-    avatar: faker.image.avatar(),
-    price: faker.number.int(150),
-    workPhotos: [workPhoto1, workPhoto2, workPhoto3, workPhoto1, workPhoto2, workPhoto3],
-    aboutMe: faker.lorem.paragraph(20),
-    averageRating: '4.9',
-    jobsCompleted: jobsCompleted,
-    datesBooked: [],
-    languages: [spainFlag, usFlag, chinaFlag, arabicFlag, vietnamFlag],
-    ratings: Array.from({ length: jobsCompleted }, (_, i) => ({
-      jobType: ['Gardening', 'Plumbing', 'Carpentry', 'Electrical'][i % 4],
-      userName: faker.person.fullName(),
-      date: faker.date.anytime(),
-      userAvatar: defaultAvatar,
-      userRated: Math.floor(Math.random() * 5) + 1,
-      userComment: faker.lorem.paragraph(),
-    })),
-  }
-}
-
-const providers = ref(Array.from({ length: 15 }, generateProvider))
+// NOTE: grabbing data from pinia from store.js in the store directory.
+const store = userList()
+const { providers } = storeToRefs(store)
 
 </script>
 
@@ -118,6 +95,7 @@ const providers = ref(Array.from({ length: 15 }, generateProvider))
           <div>
             <CardTitle>{{ provider.name }}</CardTitle>
             <CardDescription class="mt-1">
+              <!-- WARN: unsure whether to make provider reviews also a badge. -->
               <!-- <Badge variant="outline"> -->
               <img class="w-4 inline-block align-top" :src="starIcon">
               {{ provider.averageRating }}
@@ -157,7 +135,7 @@ const providers = ref(Array.from({ length: 15 }, generateProvider))
             </Dialog>
           </div>
         </div>
-        <CardTitle class="w-15">
+        <CardTitle class="w-15 flex flex-col items-center">
           ${{ provider.price }}
           <CardDescription>per hour</CardDescription>
         </CardTitle>

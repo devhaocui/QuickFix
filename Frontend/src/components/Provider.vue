@@ -91,6 +91,8 @@ function formatDate(date) {
     year: 'numeric', month: 'short', day: 'numeric',
   })
 }
+
+const isExpanded = ref(false)
 </script>
 
 <template>
@@ -113,20 +115,18 @@ function formatDate(date) {
           </div>
         </div>
         <div class="flex flex-col items-center">
-          <CardTitle class="mb-2">
-            ${{ provider.price }}/hr
-          </CardTitle>
-          <Button>Select Me</Button>
+          <CardTitle> ${{ provider.price }} / hr </CardTitle>
+          <Button class="mt-2">Select Me</Button>
         </div>
       </CardHeader>
       <CardContent class="flex flex-col gap-2">
         <Separator class="my-4" />
         <CardTitle><img class="w-8 inline-block" :src="aboutMeIcon"> About Me</CardTitle>
-        <span> {{ provider.aboutMe }} Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi
-          laborum nisi
-          reprehenderit aspernatur, quia explicabo blanditiis iste laudantium tempora ducimus corrupti consequuntur
-          quibusdam atque, labore sequi quam sunt dolorem ut!🤑🤑🤑
-        </span>
+        <span :class="{ 'line-clamp-10': !isExpanded }"> {{ provider.aboutMe }} </span>
+        <button @click="isExpanded = !isExpanded"
+          class="text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start">
+          {{ isExpanded ? 'Hide ↑' : 'Read More ↓' }}
+        </button>
         <Separator class="my-2" />
         <CardTitle> <img class="w-8 inline-block" :src="albumIcon"> Work Photos</CardTitle>
         <div id="workPhotos" class="flex">

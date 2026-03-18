@@ -20,7 +20,7 @@ const navigate = (hash) => {
         <!-- <button class="big-button" @click="navigate('/')">Home</button> -->
         <!-- <button class="big-button" @click="navigate('/Payment')">Payment</button> -->
         <!-- <button class="big-button" @click="navigate('#/Login')">Login</button> -->
-        <!-- <button class="big-button" @click="navigate('#/Signup')">Signup</button> -->
+        <button class="big-button" @click="navigate('#/Signup')">Signup</button>
         <button class="big-button" @click="navigate('#/Form')">Form</button>
         <button class="big-button" @click="navigate('#/Profile')">Profile</button>
         <!-- <button class="big-button" @click="navigate('#/Provider')">Provider</button> -->
@@ -91,8 +91,10 @@ const navigate = (hash) => {
 }
 
 /* Main button */
+/* NOTE: modify size of button here */
+
 .button-scope .big-button {
-  padding: 1em 3em;
+  padding: 0.5em 1.5em;
 
   border: 2px solid var(--colorShadeA);
   border-radius: 1em;

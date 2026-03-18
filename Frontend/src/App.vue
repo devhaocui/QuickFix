@@ -8,13 +8,9 @@ import Signup from '@/components/Signup.vue'
 import Form from '@/components/Form.vue'
 import Profile from '@/components/Profile.vue'
 import Test from '@/components/Test.vue'
-import Hello from './components/Hello.vue'
 import Temp from '@/components/Temp.vue'
 import Provider from '@/components/Provider.vue'
 import ProviderList from '@/components/ProviderList.vue'
-
-
-
 import { Toaster } from '@/components/ui/sonner'
 
 const routes = {
@@ -27,7 +23,6 @@ const routes = {
   '/Test': Test,
   '/Temp': Temp,
   // '/Provider': Provider,
-  '/Hello': Hello,
   '/ProviderList': ProviderList,
 }
 
@@ -50,8 +45,8 @@ const currentView = computed(() => {
 
 <template>
   <div class="flex flex-col items-center">
+    <Header v-show="isLoggedIn" />
     <div v-if='isLoggedIn' class="flex flex-col items-center">
-      <Header v-show="isLoggedIn" />
       <div class="m-20">
         <component :is="currentView" />
       </div>
