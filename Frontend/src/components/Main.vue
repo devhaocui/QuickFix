@@ -50,7 +50,7 @@ function selectjob(item) {
         Schedule an appointment now and lets get your problems fixed!
       </h2>
 
-      <!-- Search Box -->
+      <!-- NOTE: Search Box -->
       <div class="w-full max-w-sm relative">
         <!-- Input Row -->
         <div class="flex items-center gap-2">
@@ -59,9 +59,9 @@ function selectjob(item) {
           <Button type="submit"> Search </Button>
         </div>
 
-        <!-- Floating Dropdown Wrapper -->
+        <!-- NOTE: Floating Dropdown Wrapper -->
         <div v-if="showScroll" class="absolute mt-1 w-full z-1">
-          <ScrollArea class="h-[200px] w-full rounded-md bg-background shadow-lg">
+          <ScrollArea class="h-50 w-full rounded-md bg-background shadow-lg">
             <div class="p-6 space-y-3">
               <div v-for="job in filteredJobs" :key="job" @mousedown="selectjob(job)"
                 class="cursor-pointer rounded px-2 py-1 border hover:bg-muted transition">
@@ -72,7 +72,7 @@ function selectjob(item) {
         </div>
       </div>
 
-      <!-- Job Type Buttons/Icons -->
+      <!-- NOTE: Job Type Buttons/Icons -->
       <div class="flex flex-wrap items-center justify-center scale-[2] p-6 rounded-lg">
         <div class="flex flex-col items-center">
           <Button class="p-1" variant="outline" size="icon" aria-label="Submit"> <img :src="drillImage"> </Button>

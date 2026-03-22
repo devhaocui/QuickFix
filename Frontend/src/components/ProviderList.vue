@@ -1,17 +1,11 @@
 <script setup>
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardDescription,
+  CardFooter, CardHeader, CardTitle,
 } from '@/components/ui/card'
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+  Avatar, AvatarFallback, AvatarImage,
 } from '@/components/ui/avatar'
 
 import { Button } from '@/components/ui/button'
@@ -21,33 +15,23 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Label } from '@/components/ui/label'
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  Popover, PopoverContent, PopoverTrigger,
 } from '@/components/ui/popover'
 
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogClose, DialogContent,
+  DialogDescription, DialogFooter, DialogHeader,
+  DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog'
 
 import {
-  Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
+  Carousel, CarouselContent, CarouselItem,
+  CarouselNext, CarouselPrevious
 } from '@/components/ui/carousel'
 
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
+  Pagination, PaginationContent, PaginationEllipsis,
+  PaginationItem, PaginationNext, PaginationPrevious,
 } from '@/components/ui/pagination'
 
 import { ref, computed } from 'vue'
@@ -74,9 +58,9 @@ import { faker } from '@faker-js/faker';
 import { Badge } from '@/components/ui/badge'
 import Provider from '@/components/Provider.vue'
 import { userList } from '@/store/userList'
-import { storeToRefs } from 'pinia'
 
-// NOTE: grabbing data from pinia from store.js in the store directory.
+import { storeToRefs } from 'pinia'
+// NOTE: grabbing data from pinia from store.js in the /store directory.
 const store = userList()
 const { providers } = storeToRefs(store)
 
@@ -86,7 +70,6 @@ const { providers } = storeToRefs(store)
   <div v-for="(provider, index) in providers" :key="index" class="m-5">
     <Card class="flex flex-col max-w-150 min-w-120">
       <CardHeader class="justify-between flex-row">
-        <!-- <div class="flex flex-row gap-20 m-2 pt-10 pl-10"> -->
         <div class="flex flex-row gap-20 m-2 pl-10">
           <Avatar class="scale-[4] self-center">
             <AvatarImage :src="provider.avatar" alt="@shadcn" />
@@ -96,25 +79,18 @@ const { providers } = storeToRefs(store)
             <CardTitle>{{ provider.name }}</CardTitle>
             <CardDescription class="mt-1">
               <!-- WARN: unsure whether to make provider reviews also a badge. -->
-              <!-- <Badge variant="outline"> -->
-              <img class="w-4 inline-block align-top" :src="starIcon">
-              {{ provider.averageRating }}
-              ({{ provider.ratings.length }})
-              reviews
-              <!-- </Badge> -->
+              <Badge variant="outline" size="sm">
+                <img class="w-4 inline-block align-top" :src="starIcon">
+                {{ provider.averageRating }}
+                ({{ provider.ratings.length }})
+                reviews
+              </Badge>
             </CardDescription>
 
-            <CardDescription class="mt-1 flex flex-col">
+            <CardDescription class="flex flex-col">
               <Badge variant="outline">
-                <img class="w-5 inline-block" :src="checkMarkIcon">
+                <img class="w-4 inline-block" :src="checkMarkIcon">
                 Completed {{ provider.jobsCompleted }} Jobs
-              </Badge>
-              <Badge variant="outline">
-                <img class="w-5 inline-block align-top" :src="checkMarkIcon">
-                Fluent in
-                <div v-for="language in provider.languages">
-                  <img :src="language" class="w-5">
-                </div>
               </Badge>
             </CardDescription>
             <Dialog>
@@ -128,6 +104,7 @@ const { providers } = storeToRefs(store)
                 </DialogHeader>
                 <ScrollArea class="h-full max-h-full">
                   <div class="p-4">
+                    <!-- WARN: passing data to Provider.vue -->
                     <Provider :provider="provider" />
                   </div>
                 </ScrollArea>
@@ -137,6 +114,7 @@ const { providers } = storeToRefs(store)
         </div>
         <CardTitle class="w-15 flex flex-col items-center">
           ${{ provider.price }}
+          <!-- <Badge variant="outline" class="text-base">${{ provider.price }}</Badge> -->
           <CardDescription>per hour</CardDescription>
         </CardTitle>
       </CardHeader>

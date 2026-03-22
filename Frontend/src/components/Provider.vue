@@ -1,17 +1,11 @@
 <script setup>
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardDescription, CardFooter,
+  CardHeader, CardTitle,
 } from '@/components/ui/card'
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+  Avatar, AvatarFallback, AvatarImage,
 } from '@/components/ui/avatar'
 
 import { Button } from '@/components/ui/button'
@@ -21,47 +15,34 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Label } from '@/components/ui/label'
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  Popover, PopoverContent, PopoverTrigger,
 } from '@/components/ui/popover'
 
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogClose, DialogContent, DialogDescription,
+  DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog'
 
 import {
   Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 } from '@/components/ui/carousel'
+import { watchOnce } from '@vueuse/core'
 
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
+  Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
+  PaginationNext, PaginationPrevious,
 } from '@/components/ui/pagination'
 
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+  HoverCard, HoverCardContent, HoverCardTrigger,
 } from '@/components/ui/hover-card'
 
 import { ref, computed } from 'vue'
-import workPhoto1 from '@/assets/workPhotos/bathroom.jpg'
-import workPhoto2 from '@/assets/workPhotos/garden.jpg'
-import workPhoto3 from '@/assets/workPhotos/kitchen.jpg'
-import profAvatar from '@/assets/avatars/avatar.png'
-import defaultAvatar from '@/assets/avatars/defaultAvatar.png'
+// import workPhoto1 from '@/assets/workPhotos/bathroom.jpg'
+// import workPhoto2 from '@/assets/workPhotos/garden.jpg'
+// import workPhoto3 from '@/assets/workPhotos/kitchen.jpg'
+// import profAvatar from '@/assets/avatars/avatar.png'
+// import defaultAvatar from '@/assets/avatars/defaultAvatar.png'
 import starIcon from '@/assets/icons/star.png'
 import aboutMeIcon from '@/assets/icons/aboutMe.png'
 import albumIcon from '@/assets/icons/album.png'
@@ -70,7 +51,9 @@ import reviewIcon from '@/assets/icons/review.png'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { faker } from '@faker-js/faker';
+import checkMarkIcon from '@/assets/icons/checkMark.png'
 
+//NOTE: grabs data from ProviderList.vue component
 const { provider } = defineProps(['provider'])
 
 const displayedPhotos = computed(() => provider.workPhotos.slice(0, 4))
@@ -86,13 +69,36 @@ const chunkUserRating = computed(() => {
   return chunks
 })
 
+// format date to human readable format
 function formatDate(date) {
   return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric', month: 'short', day: 'numeric',
   })
 }
 
+// bool state var for read more and read less.
 const isExpanded = ref(false)
+
+//NOTE: all this to get photo Carousel number update ex. 4th photo / 6 (total)
+const api = ref()
+const totalCount = ref(0)
+const current = ref(0)
+
+function setApi(val) {
+  api.value = val
+}
+
+watchOnce(api, (api) => {
+  if (!api)
+    return
+
+  totalCount.value = api.scrollSnapList().length
+  current.value = api.selectedScrollSnap() + 1
+
+  api.on('select', () => {
+    current.value = api.selectedScrollSnap() + 1
+  })
+})
 </script>
 
 <template>
@@ -104,14 +110,20 @@ const isExpanded = ref(false)
             <AvatarImage :src="provider.avatar" alt="photo" />
             <AvatarFallback>Avatar</AvatarFallback>
           </Avatar>
-          <div>
+          <div class="flex flex-col h-10">
             <CardTitle>{{ provider.name }}</CardTitle>
-            <CardDescription>
-              <img class="w-5 inline-block align-top" :src="starIcon">
-              {{ provider.averageRating }}
-              ({{ totalRating }})
-              reviews
+            <CardDescription class="mt-1">
+              <Badge variant="outline">
+                <img class="w-4 inline-block align-top" :src="starIcon">
+                {{ provider.averageRating }}
+                ({{ totalRating }})
+                reviews
+              </Badge>
             </CardDescription>
+            <Badge variant="outline">
+              <img class="w-4 inline-block" :src="checkMarkIcon">
+              Completed {{ provider.jobsCompleted }} Jobs
+            </Badge>
           </div>
         </div>
         <div class="flex flex-col items-center">
@@ -123,10 +135,10 @@ const isExpanded = ref(false)
         <Separator class="my-4" />
         <CardTitle><img class="w-8 inline-block" :src="aboutMeIcon"> About Me</CardTitle>
         <span :class="{ 'line-clamp-10': !isExpanded }"> {{ provider.aboutMe }} </span>
-        <button @click="isExpanded = !isExpanded"
-          class="text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start">
+        <Button variant="link" @click="isExpanded = !isExpanded"
+          class="p-0 text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start">
           {{ isExpanded ? 'Hide ↑' : 'Read More ↓' }}
-        </button>
+        </Button>
         <Separator class="my-2" />
         <CardTitle> <img class="w-8 inline-block" :src="albumIcon"> Work Photos</CardTitle>
         <div id="workPhotos" class="flex">
@@ -143,21 +155,9 @@ const isExpanded = ref(false)
                 </AspectRatio>
               </HoverCardContent>
             </HoverCard>
-            <!-- NOTE: The Popover below is a click feature. HoverCard is the hover one. -->
-            <!-- <Popover> -->
-            <!--   <PopoverTrigger class="w-full h-full"> -->
-            <!--     <AspectRatio :ratio="1 / 1"> -->
-            <!--       <img :src="photo" class="object-cover h-full rounded-lg p-0.5" /> -->
-            <!--     </AspectRatio> -->
-            <!--     <PopoverContent class="w-130 border-0"> -->
-            <!--       <AspectRatio :ratio="3 / 2"> -->
-            <!--         <img :src="photo" class="w-full h-full rounded-lg" /> -->
-            <!--       </AspectRatio> -->
-            <!--     </PopoverContent> -->
-            <!--   </PopoverTrigger> -->
-            <!-- </Popover> -->
           </div>
 
+          <!-- NOTE: If provider has more than 4 images, show the Carousel. -->
           <div v-if="provider.workPhotos.length > 4" class="w-25">
             <Dialog>
               <DialogTrigger as-child>
@@ -176,16 +176,20 @@ const isExpanded = ref(false)
                 <DialogHeader>
                   <DialogTitle></DialogTitle>
                   <DialogDescription></DialogDescription>
-                  <Carousel>
+                  <Carousel class="flex flex-col items-center" :opts="{ startIndex: 4, loop: true, duration: 10 }"
+                    @init-api="setApi">
                     <CarouselContent>
-                      <CarouselItem v-for="photo in provider.workPhotos">
-                        <div class="flex aspect-square items-center justify-center">
+                      <CarouselItem v-for="(photo, index) in provider.workPhotos" :key="photo.name">
+                        <div class="aspect-square">
                           <img :src="photo" class="w-full h-full object-cover rounded-lg" />
                         </div>
                       </CarouselItem>
                     </CarouselContent>
                     <CarouselPrevious />
                     <CarouselNext />
+                    <Badge class="mt-2 text-sm bg-blue-500 text-white" variant="outline">
+                      {{ current }} of {{ totalCount }} photos
+                    </Badge>
                   </Carousel>
                 </DialogHeader>
               </DialogContent>
@@ -195,6 +199,7 @@ const isExpanded = ref(false)
         <Separator class="my-2" />
       </CardContent>
 
+      <!-- NOTE: Provider Ratings Section -->
       <CardFooter class="flex flex-col">
         <div class="items-start self-start w-full h-auto">
           <CardTitle><img class="w-8 inline-block" :src="reviewIcon"> Ratings</CardTitle>
@@ -225,7 +230,6 @@ const isExpanded = ref(false)
             </div>
           </Card>
         </div>
-
         <div v-if="provider.ratings.length > 0">
           <Pagination :items-per-page="ratingsPerPage" :total="provider.ratings.length" :default-page="1"
             @update:page="currentPage = $event">

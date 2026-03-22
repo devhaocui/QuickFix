@@ -37,7 +37,7 @@ import { Input } from "@/components/ui/input"
             <FieldLabel for="email">
               Email
             </FieldLabel>
-            <Input id="email" type="email" placeholder="m@example.com" required />
+            <Input id="email" type="email" placeholder="John@gmail.com" required />
             <FieldDescription>
               We'll use this to contact you. We will not share your email with
               anyone else.
