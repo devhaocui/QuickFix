@@ -11,6 +11,7 @@ import Test from '@/components/Test.vue'
 import Temp from '@/components/Temp.vue'
 import Provider from '@/components/Provider.vue'
 import ProviderList from '@/components/ProviderList.vue'
+import FavoriteProvider from '@/components/FavoriteProvider.vue'
 import { Toaster } from '@/components/ui/sonner'
 
 const routes = {
@@ -24,9 +25,10 @@ const routes = {
   '/Temp': Temp,
   // '/Provider': Provider,
   '/ProviderList': ProviderList,
+  '/FavoriteProvider': FavoriteProvider
 }
 
-const isLoggedIn = ref(false)
+const isLoggedIn = ref(true)
 function handleLoginSuccess() {
   isLoggedIn.value = true
   // window.location.hash = '/'

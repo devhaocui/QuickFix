@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { Button } from "@/components/ui/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardDescription,
+  CardHeader, CardTitle,
 } from "@/components/ui/card"
+
 import {
-  Field,
-  FieldDescription,
-  FieldGroup,
+  Field, FieldDescription, FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
+
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+
 </script>
 
 <template>
@@ -62,11 +60,11 @@ import { Input } from "@/components/ui/input"
               <Button type="submit">
                 Create Account
               </Button>
-              <Button variant="outline" type="button">
-                Sign up with Google
-              </Button>
+              <!-- <Button variant="outline" type="button"> -->
+              <!--   Sign up with Google -->
+              <!-- </Button> -->
               <FieldDescription class="px-6 text-center">
-                Already have an account? <a href="#">Sign in</a>
+                Already have an account? <a href="#/Login">Sign in</a>
               </FieldDescription>
             </Field>
           </FieldGroup>

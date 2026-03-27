@@ -1,17 +1,11 @@
 <script setup>
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardDescription,
+  CardFooter, CardHeader, CardTitle,
 } from '@/components/ui/card'
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+  Avatar, AvatarFallback, AvatarImage,
 } from '@/components/ui/avatar'
 
 import { Button } from '@/components/ui/button'
@@ -21,34 +15,27 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Label } from '@/components/ui/label'
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+  Popover, PopoverContent, PopoverTrigger,
 } from '@/components/ui/popover'
 
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
+  HoverCard, HoverCardContent, HoverCardTrigger,
 } from '@/components/ui/hover-card'
 
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogClose, DialogContent,
+  DialogDescription, DialogFooter, DialogHeader,
+  DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog'
 
 import {
-  Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
+  Carousel, CarouselContent, CarouselItem,
+  CarouselNext, CarouselPrevious
 } from '@/components/ui/carousel'
 
 import { Badge } from '@/components/ui/badge'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import deleteIcon from '@/assets/icons/delete.png'
 
 //WARN: ideally, with a fully integrated backend we would try to grab data based on current user.
 //1. if user is logged in, if user is a provider, pull provider data based on current user ID.
@@ -73,8 +60,15 @@ function showScrollState() {
 
 //NOTE: This is for image upload, image display
 const photoList = ref([])
+// const photoList = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) //BUG: for debugging
 const selectedImage = ref()
 const displayedPhotos = computed(() => photoList.value.slice(0, 4))
+
+function removePhoto(photo) {
+  console.log('remove photo -> ' + photo)
+  photoList.value = photoList.value.filter((p) => p !== photo)
+}
+
 
 function handleDebug() {
   console.log('userMsg = ' + userMsg.value)
@@ -126,6 +120,29 @@ function handleAvatarSubmit() {
 const componentKey = ref(0)
 const forceReRender = () => { componentKey.value++ }
 
+//NOTE: all this to get photo Carousel number update ex. 4th out of 6 photos (4/6)
+const api = ref()
+const totalCount = computed(() => photoList.value.length)
+const current = ref(0)
+
+const showReadMoreButton = computed(() => {
+  return provider.aboutMe.split(' ').length > 80
+})
+
+function setApi(val) {
+  api.value = val
+}
+
+watch(api, (api) => {
+  if (!api)
+    return
+  // totalCount.value = api.scrollSnapList().length
+  current.value = api.selectedScrollSnap() + 1
+  api.on('select', () => {
+    current.value = api.selectedScrollSnap() + 1
+  })
+})
+
 </script>
 
 <template>
@@ -156,10 +173,11 @@ const forceReRender = () => { componentKey.value++ }
       </CardHeader>
       <CardContent>
         <Label class="p-2">Profile Description</Label>
-        <Textarea v-model="userMsg" id="description" class="min-h-50 min-w-full text-pretty"
-          placeholder="Write a concise but detailed description on how you can help the customers. Detailing on your experiences, what you may have done before, or who you are.">
+        <Textarea v-model="userMsg" id="description" class="min-h-50 min-w-full text-pretty" placeholder="Write a concise but detailed description on how you can help the customers.
+          Detailing on your experiences, what you may have done before, or who you are.">
         </Textarea>
 
+        <!-- BUG: Disabled until fully implemented -->
         <!-- NOTE: Language Selection Area -->
         <!-- <Label class="mt-5">Language Selection</Label> -->
         <!-- <div class="w-full max-w-sm relative"> -->
@@ -183,15 +201,25 @@ const forceReRender = () => { componentKey.value++ }
         <!-- </div> -->
 
         <!-- NOTE: Work Photo Section -->
-        <Label for="workPhotos" class="mt-5 mb-3">Work Photos</Label>
+        <Label v-if="photoList.length > 0" for="workPhotos" class="mt-5 mb-2">Work Photos</Label>
         <div id="workPhotos" class="flex">
-          <div v-for="photo in displayedPhotos" class="w-25">
+          <div v-for="photo in displayedPhotos">
             <HoverCard :open-delay="50" :close-delay="0">
-              <HoverCardTrigger as-child>
-                <AspectRatio :ratio="1 / 1">
-                  <img :src="photo" class="object-cover h-full rounded-lg p-0.5" />
-                </AspectRatio>
-              </HoverCardTrigger>
+              <div class="flex flex-col w-25">
+                <HoverCardTrigger>
+                  <div class="flex flex-col">
+                    <AspectRatio :ratio="1 / 1">
+                      <!-- <span class="text-4xl font-semibold"> {{ photo }}</span> -->
+                      <img :src="photo" class="object-cover h-full rounded-lg p-0.5" />
+                    </AspectRatio>
+                  </div>
+                </HoverCardTrigger>
+                <Button class="hover:bg-destructive hover:text-white self-center" @click="removePhoto(photo)"
+                  variant="outline" size="sm">
+                  X
+                  <!-- <img :src="deleteIcon"> -->
+                </Button>
+              </div>
               <HoverCardContent class="w-130 border-0">
                 <AspectRatio :ratio="3 / 2">
                   <img :src="photo" class="w-full h-full rounded-lg" />
@@ -201,10 +229,10 @@ const forceReRender = () => { componentKey.value++ }
           </div>
 
           <!-- NOTE: If provider has more than 4 images, condense it. -->
-          <div v-if="photoList.length > 4" class="w-25">
+          <div v-if="photoList.length > 4">
             <Dialog>
               <DialogTrigger as-child>
-                <button type="button" class="w-full h-full">
+                <button class="w-25 h-full flex flex-col">
                   <AspectRatio :ratio="1 / 1">
                     <div class="relative h-full w-full">
                       <img :src="photoList[4]" class="object-cover h-full rounded-lg p-0.5">
@@ -219,16 +247,29 @@ const forceReRender = () => { componentKey.value++ }
                 <DialogHeader>
                   <DialogTitle></DialogTitle>
                   <DialogDescription></DialogDescription>
-                  <Carousel>
+
+                  <!-- BUG: why tf does this cause an error???? -->
+                  <!-- <Carousel class="flex flex-col items-center" :opts="{ startIndex: 4, loop: true, duration: 10 }" -->
+
+                  <Carousel class="flex flex-col items-center" :opts="{ startIndex: 4, loop: true, duration: 10 }"
+                    @init-api="setApi">
                     <CarouselContent>
-                      <CarouselItem v-for="photo in photoList">
-                        <div class="flex aspect-square items-center justify-center">
+                      <CarouselItem v-for="photo in photoList" :key="photo">
+                        <div class="flex flex-col items-center aspect-square">
+                          <!-- <div> -->
+                          <!-- <span class="text-4xl font-semibold"> {{ photo }}</span> -->
                           <img :src="photo" class="w-full h-full object-cover rounded-lg" />
+                          <!-- </div> -->
+                          <Button class="mt-2 mb-5 w-20 hover:bg-destructive hover:text-white"
+                            @click="removePhoto(photo)" variant="outline">Remove</Button>
                         </div>
                       </CarouselItem>
                     </CarouselContent>
                     <CarouselPrevious />
                     <CarouselNext />
+                    <Badge class="mt-2 text-sm bg-blue-500 text-white" variant="outline">
+                      {{ current }} of {{ totalCount }} photos
+                    </Badge>
                   </Carousel>
                 </DialogHeader>
               </DialogContent>
@@ -240,7 +281,6 @@ const forceReRender = () => { componentKey.value++ }
           class="w-50 cursor-pointer" />
       </CardContent>
       <CardFooter>
-
         <Button :onclick="handleDebug">Save Profile</Button>
       </CardFooter>
     </Card>

@@ -19,14 +19,15 @@ const navigate = (hash) => {
       <div class="button-scope">
         <!-- <button class="big-button" @click="navigate('/')">Home</button> -->
         <!-- <button class="big-button" @click="navigate('/Payment')">Payment</button> -->
+        <!-- <button class="big-button" @click="navigate('#/Provider')">Provider</button> -->
         <!-- <button class="big-button" @click="navigate('#/Login')">Login</button> -->
-        <button class="big-button" @click="navigate('#/Signup')">Signup</button>
+        <!-- <button class="big-button" @click="navigate('#/Signup')">Signup</button> -->
         <button class="big-button" @click="navigate('#/Form')">Form</button>
         <button class="big-button" @click="navigate('#/Profile')">Profile</button>
-        <!-- <button class="big-button" @click="navigate('#/Provider')">Provider</button> -->
         <button class="big-button" @click="navigate('#/Test')">Test</button>
         <button class="big-button" @click="navigate('#/Temp')">temp</button>
         <button class="big-button" @click="navigate('#/ProviderList')">ProviderList</button>
+        <button class="big-button" @click="navigate('#/FavoriteProvider')">FavoriteProvider</button>
       </div>
     </header>
     <Separator class="my-3" />

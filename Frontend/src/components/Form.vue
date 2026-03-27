@@ -8,44 +8,27 @@ import { h } from 'vue'
 import { toast } from 'vue-sonner'
 
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
+  Form, FormControl, FormField,
+  FormItem, FormLabel, FormMessage
 } from '@/components/ui/form'
 
 import { Input } from '@/components/ui/input'
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectGroup,
+  SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
 import {
-  Stepper,
-  StepperDescription,
-  StepperItem,
-  StepperSeparator,
-  StepperTitle,
-  StepperTrigger
+  Stepper, StepperDescription, StepperItem,
+  StepperSeparator, StepperTitle, StepperTrigger
 } from '@/components/ui/stepper'
 
 import {
-  RadioGroup,
-  RadioGroupItem,
+  RadioGroup, RadioGroupItem,
 } from '@/components/ui/radio-group'
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardDescription,
+  CardFooter, CardHeader, CardTitle,
 } from '@/components/ui/card'
 
 import { Textarea } from '@/components/ui/textarea'
@@ -118,6 +101,7 @@ function onSubmit(values) {
   })
   console.log(JSON.stringify(values))
 }
+
 </script>
 
 <template>
@@ -129,7 +113,6 @@ function onSubmit(values) {
         class="block w-full">
         <form @submit="(e) => {
           e.preventDefault()
-          validate()
 
           if (stepIndex === steps.length && meta.valid) {
             onSubmit(values)

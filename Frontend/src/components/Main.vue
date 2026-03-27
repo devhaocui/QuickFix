@@ -64,7 +64,7 @@ function selectjob(item) {
           <ScrollArea class="h-50 w-full rounded-md bg-background shadow-lg">
             <div class="p-6 space-y-3">
               <div v-for="job in filteredJobs" :key="job" @mousedown="selectjob(job)"
-                class="cursor-pointer rounded px-2 py-1 border hover:bg-muted transition">
+                class="cursor-pointer rounded px-2 py-1 hover:bg-muted transition">
                 {{ job.name }}
               </div>
             </div>
@@ -75,11 +75,15 @@ function selectjob(item) {
       <!-- NOTE: Job Type Buttons/Icons -->
       <div class="flex flex-wrap items-center justify-center scale-[2] p-6 rounded-lg">
         <div class="flex flex-col items-center">
-          <Button class="p-1" variant="outline" size="icon" aria-label="Submit"> <img :src="drillImage"> </Button>
+          <a href="#/Form">
+            <Button class="p-1" variant="outline" size="icon" aria-label="Submit"> <img :src="drillImage"> </Button>
+          </a>
           <div class="scale-[0.5] mt-1"> Home Repair </div>
         </div>
         <div class="flex flex-col items-center">
-          <Button class="p-1" variant="outline" size="icon" aria-label="Submit"> <img :src="garden"> </Button>
+          <a href="#/Form">
+            <Button class="p-1" variant="outline" size="icon" aria-label="Submit"> <img :src="garden"> </Button>
+          </a>
           <div class="scale-[0.5] mt-1"> Gardening </div>
         </div>
       </div>

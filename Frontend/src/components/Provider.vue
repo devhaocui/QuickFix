@@ -26,7 +26,6 @@ import {
 import {
   Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 } from '@/components/ui/carousel'
-import { watchOnce } from '@vueuse/core'
 
 import {
   Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
@@ -37,7 +36,7 @@ import {
   HoverCard, HoverCardContent, HoverCardTrigger,
 } from '@/components/ui/hover-card'
 
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 // import workPhoto1 from '@/assets/workPhotos/bathroom.jpg'
 // import workPhoto2 from '@/assets/workPhotos/garden.jpg'
 // import workPhoto3 from '@/assets/workPhotos/kitchen.jpg'
@@ -79,26 +78,32 @@ function formatDate(date) {
 // bool state var for read more and read less.
 const isExpanded = ref(false)
 
-//NOTE: all this to get photo Carousel number update ex. 4th photo / 6 (total)
+//NOTE: all this to get photo Carousel number update ex. 4th out of 6 photos (4/6)
 const api = ref()
 const totalCount = ref(0)
 const current = ref(0)
+
+const showReadMoreButton = computed(() => {
+  return provider.aboutMe.split(' ').length > 80
+})
 
 function setApi(val) {
   api.value = val
 }
 
-watchOnce(api, (api) => {
+watch(api, (api) => {
   if (!api)
     return
-
   totalCount.value = api.scrollSnapList().length
   current.value = api.selectedScrollSnap() + 1
-
   api.on('select', () => {
     current.value = api.selectedScrollSnap() + 1
   })
 })
+
+//BUG: Debugging Area
+console.log('length of user aboutMe description = ' + provider.aboutMe.split(' ').length)
+console.log('showReadMoreButton state = ' + showReadMoreButton.value)
 </script>
 
 <template>
@@ -135,7 +140,7 @@ watchOnce(api, (api) => {
         <Separator class="my-4" />
         <CardTitle><img class="w-8 inline-block" :src="aboutMeIcon"> About Me</CardTitle>
         <span :class="{ 'line-clamp-10': !isExpanded }"> {{ provider.aboutMe }} </span>
-        <Button variant="link" @click="isExpanded = !isExpanded"
+        <Button v-if="showReadMoreButton" variant="link" @click="isExpanded = !isExpanded"
           class="p-0 text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start">
           {{ isExpanded ? 'Hide ↑' : 'Read More ↓' }}
         </Button>

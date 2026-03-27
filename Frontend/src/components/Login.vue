@@ -85,9 +85,9 @@ async function login() {
                 <FieldLabel for="password">
                   Password
                 </FieldLabel>
-                <a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline">
-                  Forgot your password?
-                </a>
+                <!-- <a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline"> -->
+                <!--   Forgot your password? -->
+                <!-- </a> -->
               </div>
               <Input id="password" type="password" v-model="password" placeholder="abc" required />
             </Field>
@@ -101,7 +101,7 @@ async function login() {
               </Button>
               <FieldDescription class="text-center">
                 Don't have an account?
-                <a href="#">
+                <a href="#/Signup">
                   Sign up
                 </a>
               </FieldDescription>
