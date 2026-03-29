@@ -28,6 +28,7 @@ const navigate = (hash) => {
         <button class="big-button" @click="navigate('#/Temp')">temp</button>
         <button class="big-button" @click="navigate('#/ProviderList')">ProviderList</button>
         <button class="big-button" @click="navigate('#/FavoriteProvider')">FavoriteProvider</button>
+        <button class="big-button" @click="navigate('#/Setting')">Setting</button>
       </div>
     </header>
     <Separator class="my-3" />

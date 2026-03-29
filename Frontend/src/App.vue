@@ -12,6 +12,7 @@ import Temp from '@/components/Temp.vue'
 import Provider from '@/components/Provider.vue'
 import ProviderList from '@/components/ProviderList.vue'
 import FavoriteProvider from '@/components/FavoriteProvider.vue'
+import Setting from '@/components/Setting.vue'
 import { Toaster } from '@/components/ui/sonner'
 
 const routes = {
@@ -25,7 +26,8 @@ const routes = {
   '/Temp': Temp,
   // '/Provider': Provider,
   '/ProviderList': ProviderList,
-  '/FavoriteProvider': FavoriteProvider
+  '/FavoriteProvider': FavoriteProvider,
+  '/Setting': Setting,
 }
 
 const isLoggedIn = ref(true)
@@ -49,7 +51,7 @@ const currentView = computed(() => {
   <div class="flex flex-col items-center">
     <Header v-show="isLoggedIn" />
     <div v-if='isLoggedIn' class="flex flex-col items-center">
-      <div class="m-20">
+      <div class="m-10">
         <component :is="currentView" />
       </div>
     </div>

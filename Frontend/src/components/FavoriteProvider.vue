@@ -1,57 +1,52 @@
 <script setup>
-import { ref } from 'vue'
 import {
-  Card, CardContent,
-  CardDescription, CardFooter, CardHeader,
-  CardTitle,
+  Card,
 } from '@/components/ui/card'
 
 import {
-  Table, TableBody, TableCaption, TableCell,
-  TableFooter, TableHead, TableHeader, TableRow,
+  Table,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table'
 
 import {
-  Avatar, AvatarFallback, AvatarImage,
+  Avatar,
+  AvatarImage,
 } from '@/components/ui/avatar'
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 
-import avatar1 from '@/assets/avatars/avatar.jpg'
-import avatar2 from '@/assets/avatars/avatar.png'
 import starIcon from '@/assets/icons/star.png'
-import deleteIcon from '@/assets/icons/delete.png'
 
 import { favoriteListStore } from '@/store/userList'
 import { storeToRefs } from 'pinia'
 
-//NOTE: Data Display Example
 const store = favoriteListStore()
 const { favoriteProviders } = storeToRefs(store)
-const currentUser = ref('')
 
-console.log(favoriteProviders)
 function removeFavorite(provider) {
-  console.log('provider unfavorited -> ' + provider.name)
   favoriteProviders.value = favoriteProviders.value.filter((p) => p !== provider)
 }
 
-// format date to human readable format
 function formatDate(date) {
   return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
   })
 }
-
 </script>
 
 <template>
   <Card class="p-5">
-    <Table>
+    <Table class="max-w-auto">
       <TableHeader>
         <TableRow class="**:text-black **:font-semibold">
-          <!-- <TableHead>Avatar</TableHead> -->
           <TableHead></TableHead>
           <TableHead class="w-50">Name</TableHead>
           <TableHead class="w-50">Hired For</TableHead>
@@ -60,39 +55,68 @@ function formatDate(date) {
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody>
-        <TableRow v-for="provider in favoriteProviders" :key="provider.userID">
+
+      <TransitionGroup name="favorite">
+        <TableRow
+          v-for="provider in favoriteProviders"
+          :key="provider.userID"
+        >
           <TableCell>
-            <Avatar class="scale-[1.3]">
+            <Avatar class="scale-[1.3] align-top">
               <AvatarImage :src="provider.avatar" />
             </Avatar>
           </TableCell>
-          <TableCell> {{ provider.name }} </TableCell>
+
+          <TableCell>{{ provider.name }}</TableCell>
+
           <TableCell>
-            <Badge variant="outline" class="scale-[1.1] bg-green-600 text-white">{{ provider.hiredFor }}</Badge>
+            <Badge variant="outline" class="scale-[1.1] bg-green-600 text-white">
+              {{ provider.hiredFor }}
+            </Badge>
           </TableCell>
+
           <TableCell>{{ formatDate(provider.dateRecentlyHired) }}</TableCell>
+
           <TableCell>
             <Badge variant="ghost" class="scale-[1.1]">
-              <img class="w-4 inline-block align-top" :src="starIcon">
+              <img class="w-4 inline-block align-top" :src="starIcon" />
               {{ provider.userRated }}.0
             </Badge>
           </TableCell>
-          <TableCell><Button @click="removeFavorite(provider)" class="hover:bg-destructive hover:text-white"
-              variant="outline" size="sm">Remove</Button></TableCell>
+
+          <TableCell>
+            <Button
+              @click="removeFavorite(provider)"
+              class="hover:bg-destructive hover:text-white"
+              variant="outline"
+              size="sm"
+            >
+              Remove
+            </Button>
+          </TableCell>
         </TableRow>
-      </TableBody>
-      <TableFooter>
-        <!-- <TableRow> -->
-        <!--   <TableCell colspan="3"> -->
-        <!--     Total -->
-        <!--   </TableCell> -->
-        <!--   <TableCell class="text-right"> -->
-        <!--     $2,500.00 -->
-        <!--   </TableCell> -->
-        <!-- </TableRow> -->
-      </TableFooter>
+      </TransitionGroup>
+
+      <TableFooter />
       <TableCaption>A list of your favorited providers.</TableCaption>
     </Table>
   </Card>
 </template>
+
+<style scoped>
+.favorite-move,
+.favorite-enter-active,
+.favorite-leave-active {
+  transition: all 0.35s ease;
+}
+
+.favorite-enter-from,
+.favorite-leave-to {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+.favorite-leave-active {
+  position: relative;
+}
+</style>
