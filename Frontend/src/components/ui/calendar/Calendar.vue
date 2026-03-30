@@ -14,8 +14,8 @@ import {
   CalendarHeadCell,
   CalendarHeader,
   CalendarHeading,
-  CalendarNextButton,
-  CalendarPrevButton,
+  // CalendarNextButton,
+  // CalendarPrevButton,
 } from ".";
 
 const props = defineProps<
