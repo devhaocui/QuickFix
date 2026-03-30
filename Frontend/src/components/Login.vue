@@ -1,61 +1,60 @@
 <script setup>
 // import type { HTMLAttributes } from "vue"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import 'vue-toast-notification/dist/theme-sugar.css'
-import { useToast } from 'vue-toast-notification'
-import { ref } from 'vue'
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import "vue-toast-notification/dist/theme-sugar.css";
+import { useToast } from "vue-toast-notification";
+import { ref } from "vue";
 
-const emit = defineEmits(['login-success'])
-const email = ref('')
-const password = ref('')
+const emit = defineEmits(["login-success"]);
+const email = ref("");
+const password = ref("");
 
 function quickLogin() {
-  emit('login-success')
+  emit("login-success");
 }
 
 async function login() {
-  const $toast = useToast()
-  const response = await fetch('http://localhost:3000/api/users/login', {
-    method: 'POST',
+  const $toast = useToast();
+  const response = await fetch("http://localhost:3000/api/users/login", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       name: email.value,
       password: password.value,
     }),
-  })
+  });
 
-  const data = await response.json()
+  const data = await response.json();
 
   if (!response.ok) {
-    let instance = $toast.success(data.message)
-    console.error('Login Failed', data.message)
-    throw new Error(data.message)
+    let instance = $toast.success(data.message);
+    console.error("Login Failed", data.message);
+    throw new Error(data.message);
   }
 
   // sends data to App.vue (our root node)
-  emit('login-success')
-  let instance = $toast.success(data.message)
-  console.log('Login Success', data.message)
-  return data
+  emit("login-success");
+  let instance = $toast.success(data.message);
+  console.log("Login Success", data.message);
+  return data;
 }
-
 </script>
 
 <template>
@@ -75,35 +74,39 @@ async function login() {
         <form @submit.prevent="login">
           <FieldGroup>
             <Field>
-              <FieldLabel for="email">
-                Email
-              </FieldLabel>
-              <Input id="email" type="email" v-model="email" placeholder="abc@abc.com" required />
+              <FieldLabel for="email"> Email </FieldLabel>
+              <Input
+                id="email"
+                type="email"
+                v-model="email"
+                placeholder="abc@abc.com"
+                required
+              />
             </Field>
             <Field>
               <div class="flex items-center">
-                <FieldLabel for="password">
-                  Password
-                </FieldLabel>
+                <FieldLabel for="password"> Password </FieldLabel>
                 <!-- <a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline"> -->
                 <!--   Forgot your password? -->
                 <!-- </a> -->
               </div>
-              <Input id="password" type="password" v-model="password" placeholder="abc" required />
+              <Input
+                id="password"
+                type="password"
+                v-model="password"
+                placeholder="abc"
+                required
+              />
             </Field>
             <Field>
               <!-- <Button type="submit" @click="login"> -->
-              <Button type="submit">
-                Login
-              </Button>
+              <Button type="submit"> Login </Button>
               <Button variant="outline" type="button">
                 Login with Google
               </Button>
               <FieldDescription class="text-center">
                 Don't have an account?
-                <a href="#/Signup">
-                  Sign up
-                </a>
+                <a href="#/Signup"> Sign up </a>
               </FieldDescription>
             </Field>
           </FieldGroup>

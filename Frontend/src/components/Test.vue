@@ -56,7 +56,8 @@
 <!-- </script> -->
 <!---->
 <!-- <template> -->
-<!--   <!-- <Button :class="['animate__animated', isAnimating && 'animate__backInUp']" --> -->
+<!--   <!-- <Button :class="['animate__animated', isAnimating && 'animate__backInUp']" -->
+-->
 <!--   <div v-for="i in 10"> -->
 <!--     <Button class="animate__animated animate__backInUp">{{i - 1}}</Button> -->
 <!---->
@@ -64,9 +65,9 @@
 <!-- </template> -->
 
 <script setup>
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 
-const items = ['First', 'Second', 'Third', 'Fourth']
+const items = ["First", "Second", "Third", "Fourth"];
 </script>
 
 <template>

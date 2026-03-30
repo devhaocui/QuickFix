@@ -1,109 +1,132 @@
 <script setup>
 import {
-  Card, CardContent, CardDescription, CardFooter,
-  CardHeader, CardTitle,
-} from '@/components/ui/card'
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Label } from "@/components/ui/label";
 
 import {
-  Avatar, AvatarFallback, AvatarImage,
-} from '@/components/ui/avatar'
-
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { AspectRatio } from '@/components/ui/aspect-ratio'
-import { Label } from '@/components/ui/label'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import {
-  Popover, PopoverContent, PopoverTrigger,
-} from '@/components/ui/popover'
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import {
-  Dialog, DialogClose, DialogContent, DialogDescription,
-  DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
-} from '@/components/ui/dialog'
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 import {
-  Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
-} from '@/components/ui/carousel'
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 import {
-  Pagination, PaginationContent, PaginationEllipsis, PaginationItem,
-  PaginationNext, PaginationPrevious,
-} from '@/components/ui/pagination'
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
-import {
-  HoverCard, HoverCardContent, HoverCardTrigger,
-} from '@/components/ui/hover-card'
-
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch } from "vue";
 // import workPhoto1 from '@/assets/workPhotos/bathroom.jpg'
 // import workPhoto2 from '@/assets/workPhotos/garden.jpg'
 // import workPhoto3 from '@/assets/workPhotos/kitchen.jpg'
 // import profAvatar from '@/assets/avatars/avatar.png'
 // import defaultAvatar from '@/assets/avatars/defaultAvatar.png'
-import starIcon from '@/assets/icons/star.png'
-import aboutMeIcon from '@/assets/icons/aboutMe.png'
-import albumIcon from '@/assets/icons/album.png'
-import reviewIcon from '@/assets/icons/review.png'
+import starIcon from "@/assets/icons/star.png";
+import aboutMeIcon from "@/assets/icons/aboutMe.png";
+import albumIcon from "@/assets/icons/album.png";
+import reviewIcon from "@/assets/icons/review.png";
 
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { faker } from '@faker-js/faker';
-import checkMarkIcon from '@/assets/icons/checkMark.png'
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { faker } from "@faker-js/faker";
+import checkMarkIcon from "@/assets/icons/checkMark.png";
 
 //NOTE: grabs data from ProviderList.vue component
-const { provider } = defineProps(['provider'])
+const { provider } = defineProps(["provider"]);
 
-const displayedPhotos = computed(() => provider.workPhotos.slice(0, 4))
-const totalRating = provider.ratings.length
-const ratingsPerPage = 3
-const currentPage = ref(1)
+const displayedPhotos = computed(() => provider.workPhotos.slice(0, 4));
+const totalRating = provider.ratings.length;
+const ratingsPerPage = 3;
+const currentPage = ref(1);
 const chunkUserRating = computed(() => {
-  const ratingList = provider.ratings
-  const chunks = []
+  const ratingList = provider.ratings;
+  const chunks = [];
   for (let i = 0; i < ratingList.length; i += ratingsPerPage) {
-    chunks.push(ratingList.slice(i, i + ratingsPerPage))
+    chunks.push(ratingList.slice(i, i + ratingsPerPage));
   }
-  return chunks
-})
+  return chunks;
+});
 
 // format date to human readable format
 function formatDate(date) {
-  return new Date(date).toLocaleDateString('en-US', {
-    year: 'numeric', month: 'short', day: 'numeric',
-  })
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 // bool state var for read more and read less.
-const isExpanded = ref(false)
+const isExpanded = ref(false);
 
 //NOTE: all this to get photo Carousel number update ex. 4th out of 6 photos (4/6)
-const api = ref()
-const totalCount = ref(0)
-const current = ref(0)
+const api = ref();
+const totalCount = ref(0);
+const current = ref(0);
 
 const showReadMoreButton = computed(() => {
-  return provider.aboutMe.split(' ').length > 80
-})
+  return provider.aboutMe.split(" ").length > 80;
+});
 
 function setApi(val) {
-  api.value = val
+  api.value = val;
 }
 
 watch(api, (api) => {
-  if (!api)
-    return
-  totalCount.value = api.scrollSnapList().length
-  current.value = api.selectedScrollSnap() + 1
-  api.on('select', () => {
-    current.value = api.selectedScrollSnap() + 1
-  })
-})
+  if (!api) return;
+  totalCount.value = api.scrollSnapList().length;
+  current.value = api.selectedScrollSnap() + 1;
+  api.on("select", () => {
+    current.value = api.selectedScrollSnap() + 1;
+  });
+});
 
 //BUG: Debugging Area
-console.log('length of user aboutMe description = ' + provider.aboutMe.split(' ').length)
-console.log('showReadMoreButton state = ' + showReadMoreButton.value)
+console.log(
+  "length of user aboutMe description = " + provider.aboutMe.split(" ").length,
+);
+console.log("showReadMoreButton state = " + showReadMoreButton.value);
 </script>
 
 <template>
@@ -119,14 +142,13 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
             <CardTitle>{{ provider.name }}</CardTitle>
             <CardDescription class="mt-1">
               <Badge variant="outline">
-                <img class="w-4 inline-block align-top" :src="starIcon">
+                <img class="w-4 inline-block align-top" :src="starIcon" />
                 {{ provider.averageRating }}
-                ({{ totalRating }})
-                reviews
+                ({{ totalRating }}) reviews
               </Badge>
             </CardDescription>
             <Badge variant="outline">
-              <img class="w-4 inline-block" :src="checkMarkIcon">
+              <img class="w-4 inline-block" :src="checkMarkIcon" />
               Completed {{ provider.jobsCompleted }} Jobs
             </Badge>
           </div>
@@ -138,20 +160,35 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
       </CardHeader>
       <CardContent class="flex flex-col gap-2">
         <Separator class="my-4" />
-        <CardTitle><img class="w-8 inline-block" :src="aboutMeIcon"> About Me</CardTitle>
-        <span :class="{ 'line-clamp-10': !isExpanded }"> {{ provider.aboutMe }} </span>
-        <Button v-if="showReadMoreButton" variant="link" @click="isExpanded = !isExpanded"
-          class="p-0 text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start">
-          {{ isExpanded ? 'Hide ↑' : 'Read More ↓' }}
+        <CardTitle
+          ><img class="w-8 inline-block" :src="aboutMeIcon" /> About
+          Me</CardTitle
+        >
+        <span :class="{ 'line-clamp-10': !isExpanded }">
+          {{ provider.aboutMe }}
+        </span>
+        <Button
+          v-if="showReadMoreButton"
+          variant="link"
+          @click="isExpanded = !isExpanded"
+          class="p-0 text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start"
+        >
+          {{ isExpanded ? "Hide ↑" : "Read More ↓" }}
         </Button>
         <Separator class="my-2" />
-        <CardTitle> <img class="w-8 inline-block" :src="albumIcon"> Work Photos</CardTitle>
+        <CardTitle>
+          <img class="w-8 inline-block" :src="albumIcon" /> Work
+          Photos</CardTitle
+        >
         <div id="workPhotos" class="flex">
           <div v-for="photo in displayedPhotos" class="w-25">
             <HoverCard :open-delay="50" :close-delay="0">
               <HoverCardTrigger as-child>
                 <AspectRatio :ratio="1 / 1">
-                  <img :src="photo" class="object-cover h-full rounded-lg p-0.5" />
+                  <img
+                    :src="photo"
+                    class="object-cover h-full rounded-lg p-0.5"
+                  />
                 </AspectRatio>
               </HoverCardTrigger>
               <HoverCardContent class="w-130 border-0">
@@ -169,9 +206,16 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
                 <button type="button" class="w-full h-full">
                   <AspectRatio :ratio="1 / 1">
                     <div class="relative h-full w-full">
-                      <img :src="provider.workPhotos[4]" class="object-cover h-full rounded-lg p-0.5">
-                      <div class="rounded-lg absolute inset-0.5 bg-black/50 flex items-center justify-center">
-                        <span class="text-xl font-bold text-white">{{ provider.workPhotos.length - 4 }}+</span>
+                      <img
+                        :src="provider.workPhotos[4]"
+                        class="object-cover h-full rounded-lg p-0.5"
+                      />
+                      <div
+                        class="rounded-lg absolute inset-0.5 bg-black/50 flex items-center justify-center"
+                      >
+                        <span class="text-xl font-bold text-white"
+                          >{{ provider.workPhotos.length - 4 }}+</span
+                        >
                       </div>
                     </div>
                   </AspectRatio>
@@ -181,18 +225,30 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
                 <DialogHeader>
                   <DialogTitle></DialogTitle>
                   <DialogDescription></DialogDescription>
-                  <Carousel class="flex flex-col items-center" :opts="{ startIndex: 4, loop: true, duration: 10 }"
-                    @init-api="setApi">
+                  <Carousel
+                    class="flex flex-col items-center"
+                    :opts="{ startIndex: 4, loop: true, duration: 10 }"
+                    @init-api="setApi"
+                  >
                     <CarouselContent>
-                      <CarouselItem v-for="(photo, index) in provider.workPhotos" :key="photo.name">
+                      <CarouselItem
+                        v-for="(photo, index) in provider.workPhotos"
+                        :key="photo.name"
+                      >
                         <div class="aspect-square">
-                          <img :src="photo" class="w-full h-full object-cover rounded-lg" />
+                          <img
+                            :src="photo"
+                            class="w-full h-full object-cover rounded-lg"
+                          />
                         </div>
                       </CarouselItem>
                     </CarouselContent>
                     <CarouselPrevious />
                     <CarouselNext />
-                    <Badge class="mt-2 text-sm bg-blue-500 text-white" variant="outline">
+                    <Badge
+                      class="mt-2 text-sm bg-blue-500 text-white"
+                      variant="outline"
+                    >
                       {{ current }} of {{ totalCount }} photos
                     </Badge>
                   </Carousel>
@@ -207,9 +263,16 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
       <!-- NOTE: Provider Ratings Section -->
       <CardFooter class="flex flex-col">
         <div class="items-start self-start w-full h-auto">
-          <CardTitle><img class="w-8 inline-block" :src="reviewIcon"> Ratings</CardTitle>
+          <CardTitle
+            ><img class="w-8 inline-block" :src="reviewIcon" />
+            Ratings</CardTitle
+          >
 
-          <Card v-for="rating in chunkUserRating[currentPage - 1]" :key="rating.userName" class="my-4 p-4">
+          <Card
+            v-for="rating in chunkUserRating[currentPage - 1]"
+            :key="rating.userName"
+            class="my-4 p-4"
+          >
             <div class="flex items-center gap-3">
               <Avatar class="mr-1">
                 <AvatarImage :src="rating.userAvatar" />
@@ -221,13 +284,20 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
                   <!-- NOTE: v-for loops functions fine without :key but the docs recommend it -->
                   <!-- in case of change of ordering is needed -->
 
-                  <img v-for="star in 5" :key="star" :src="starIcon" class="w-4 h-4"
-                    :class="{ 'opacity-30': star > rating.userRated }" />
+                  <img
+                    v-for="star in 5"
+                    :key="star"
+                    :src="starIcon"
+                    class="w-4 h-4"
+                    :class="{ 'opacity-30': star > rating.userRated }"
+                  />
                 </div>
               </div>
               <div class="flex gap-1 ml-auto">
                 <Badge variant="outline">{{ rating.jobType }}</Badge>
-                <Badge variant="outline"> Rated on {{ formatDate(rating.date) }}</Badge>
+                <Badge variant="outline">
+                  Rated on {{ formatDate(rating.date) }}</Badge
+                >
               </div>
             </div>
             <div class="flex flex-col text-sm gap-1">
@@ -236,14 +306,21 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
           </Card>
         </div>
         <div v-if="provider.ratings.length > 0">
-          <Pagination :items-per-page="ratingsPerPage" :total="provider.ratings.length" :default-page="1"
-            @update:page="currentPage = $event">
+          <Pagination
+            :items-per-page="ratingsPerPage"
+            :total="provider.ratings.length"
+            :default-page="1"
+            @update:page="currentPage = $event"
+          >
             <PaginationContent v-slot="{ items }">
               <div class="flex mt-5">
                 <PaginationPrevious />
                 <div v-for="(item, index) in items" :key="index">
-                  <PaginationItem v-if="item.type === 'page'" :value="item.value"
-                    :is-active="item.value === currentPage">
+                  <PaginationItem
+                    v-if="item.type === 'page'"
+                    :value="item.value"
+                    :is-active="item.value === currentPage"
+                  >
                     {{ item.value }}
                   </PaginationItem>
                 </div>
@@ -253,9 +330,7 @@ console.log('showReadMoreButton state = ' + showReadMoreButton.value)
             </PaginationContent>
           </Pagination>
         </div>
-        <div v-else class="self-start">
-          no user ratings yet.
-        </div>
+        <div v-else class="self-start">no user ratings yet.</div>
       </CardFooter>
     </Card>
   </div>
