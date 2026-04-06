@@ -6,7 +6,7 @@
       "vite/client",
       "vue"
     ],
-    "skipLibCheck": true, //skips typechecking when building project
+    // "skipLibCheck": true, //skips typechecking when building project
     "baseUrl": ".",
     "paths": {
       "@/*": [

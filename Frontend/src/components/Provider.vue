@@ -72,6 +72,8 @@ import { Separator } from "@/components/ui/separator";
 import { faker } from "@faker-js/faker";
 import checkMarkIcon from "@/assets/icons/checkMark.png";
 
+//NOTE: Reference Form at 'https://shadcn-vue.com/docs/components/stepper'
+
 //NOTE: grabs data from ProviderList.vue component
 const { provider } = defineProps(["provider"]);
 
@@ -110,17 +112,22 @@ const showReadMoreButton = computed(() => {
 });
 
 function setApi(val) {
+  console.log("setApi called", val);
   api.value = val;
 }
 
-watch(api, (api) => {
-  if (!api) return;
-  totalCount.value = api.scrollSnapList().length;
-  current.value = api.selectedScrollSnap() + 1;
-  api.on("select", () => {
+watch(
+  api,
+  (api) => {
+    if (!api) return;
+    totalCount.value = api.scrollSnapList().length;
     current.value = api.selectedScrollSnap() + 1;
-  });
-});
+    api.on("select", () => {
+      current.value = api.selectedScrollSnap() + 1;
+    });
+  },
+  { immediate: true },
+);
 
 //BUG: Debugging Area
 console.log(

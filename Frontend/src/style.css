@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -151,5 +152,29 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Roboto", sans-serif;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Roboto", sans-serif;
+  }
+}
+
+/* ============================================
+   3D Button Styles — applies to all <button>
+   ============================================ */
+:root {
+  --btn-bg: rgba(246, 241, 209);
+  --btn-shade-a: rgb(106, 163, 137);
+  --btn-shade-b: rgb(121, 186, 156);
+  --btn-shade-c: rgb(150, 232, 195);
+  --btn-shade-d: rgb(187, 232, 211);
+  --btn-shade-e: rgb(205, 255, 232);
 }

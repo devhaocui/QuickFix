@@ -125,11 +125,12 @@ function onSubmit(values) {
     },
   });
   console.log(JSON.stringify(values));
+  window.location.hash = "#/ProviderList";
 }
 </script>
 
 <template>
-  <div>
+  <div class="max-w-150 px-10 py-10 mx-auto mt-10">
     <Form
       v-slot="{ meta, values, validate }"
       as=""
@@ -154,6 +155,7 @@ function onSubmit(values) {
           @submit="
             (e) => {
               e.preventDefault();
+              validate();
 
               if (stepIndex === steps.length && meta.valid) {
                 onSubmit(values);
@@ -221,7 +223,9 @@ function onSubmit(values) {
               <Card>
                 <CardHeader>
                   <CardTitle>Service Location</CardTitle>
-                  <CardDescription>where should we meet you?</CardDescription>
+                  <CardDescription
+                    >Where should the provider show up?</CardDescription
+                  >
                 </CardHeader>
                 <CardContent class="flex flex-col gap-6">
                   <!-- Another way to rename the componentField variable so we can use field instead -->
@@ -308,7 +312,7 @@ function onSubmit(values) {
             </template>
 
             <template v-if="stepIndex === 3">
-              <Card class="min-h-full min-w-150">
+              <Card class="min-h-full">
                 <CardHeader>
                   <CardTitle class="font-semibold">Task Description</CardTitle>
                   <CardDescription>

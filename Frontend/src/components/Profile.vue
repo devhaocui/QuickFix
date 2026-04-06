@@ -158,8 +158,8 @@ watch(api, (api) => {
 </script>
 
 <template>
-  <div>
-    <Card class="min-h-200 min-w-150">
+  <div class="flex flex-col items-center m-10">
+    <Card class="max-w-200 min-h-200 min-w-150">
       <CardTitle class="text-2xl flex justify-center">Profile Setup</CardTitle>
       <CardHeader class="flex flex-row">
         <div class="flex flex-row gap-5">

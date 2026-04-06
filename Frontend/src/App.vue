@@ -48,10 +48,11 @@ const currentView = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
+  <div class="w-full min-h-screen flex flex-col items-center">
     <Header v-show="isLoggedIn" />
-    <div v-if="isLoggedIn" class="flex flex-col items-center">
-      <div class="m-10">
+    <div v-if="isLoggedIn" class="w-full flex flex-col items-center">
+      <!-- <div class="m-10"> -->
+      <div class="w-full">
         <component :is="currentView" />
       </div>
     </div>
@@ -59,3 +60,5 @@ const currentView = computed(() => {
     <Toaster />
   </div>
 </template>
+
+<style scoped></style>

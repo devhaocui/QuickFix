@@ -1,13 +1,12 @@
 <script setup>
 import { ref } from "vue";
 const year = ref("2026");
-const href = ref("https://yahoo.com");
 </script>
 
 <template>
   <footer>
-    <a :href="href"
-      ><span> Created By Seal Team Seven @copy {{ year }}</span></a
+    <span class="text-gray-500">
+      Created By Seal Team Seven @copy {{ year }}</span
     >
   </footer>
 </template>

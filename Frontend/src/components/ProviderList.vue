@@ -83,71 +83,77 @@ const { providers } = storeToRefs(store);
 </script>
 
 <template>
-  <div v-for="(provider, index) in providers" :key="index" class="m-5">
-    <Card class="flex flex-col max-w-150 min-w-120">
-      <CardHeader class="justify-between flex-row">
-        <div class="flex flex-row gap-20 m-2 pl-10">
-          <Avatar class="scale-[4] self-center">
-            <AvatarImage :src="provider.avatar" alt="@shadcn" />
-            <AvatarFallback><img :src="defaultAvatar" /></AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle>{{ provider.name }}</CardTitle>
-            <CardDescription class="mt-1">
-              <!-- WARN: unsure whether to make provider reviews also a badge. -->
-              <Badge variant="outline" size="sm">
-                <img class="w-4 inline-block align-top" :src="starIcon" />
-                {{ provider.averageRating }}
-                ({{ provider.ratings.length }}) reviews
-              </Badge>
-            </CardDescription>
+  <div>
+    <div
+      v-for="(provider, index) in providers"
+      :key="index"
+      class="flex flex-col items-center m-5"
+    >
+      <Card class="flex flex-col max-w-150 min-w-150">
+        <CardHeader class="justify-between flex-row">
+          <div class="flex flex-row gap-20 m-2 pl-10">
+            <Avatar class="scale-[3] self-center">
+              <AvatarImage :src="provider.avatar" alt="@shadcn" />
+              <AvatarFallback><img :src="defaultAvatar" /></AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle>{{ provider.name }}</CardTitle>
+              <CardDescription class="mt-1">
+                <!-- WARN: unsure whether to make provider reviews also a badge. -->
+                <Badge variant="outline" size="sm">
+                  <img class="w-4 inline-block align-top" :src="starIcon" />
+                  {{ provider.averageRating }}
+                  ({{ provider.ratings.length }}) reviews
+                </Badge>
+              </CardDescription>
 
-            <CardDescription class="flex flex-col">
-              <Badge variant="outline">
-                <img class="w-4 inline-block" :src="checkMarkIcon" />
-                Completed {{ provider.jobsCompleted }} Jobs
-              </Badge>
-            </CardDescription>
-            <Dialog>
-              <DialogTrigger as-child>
-                <Button variant="default" class="mt-3">View Profile</Button>
-              </DialogTrigger>
-              <DialogContent
-                class="h-full max-h-95/100 max-w-150 p-0 gap-0 m-0"
-              >
-                <DialogHeader class="sr-only">
-                  <DialogTitle>Provider Profile</DialogTitle>
-                  <DialogDescription
-                    >Full provider profile details</DialogDescription
-                  >
-                </DialogHeader>
-                <ScrollArea class="h-full max-h-full">
-                  <div class="p-4">
-                    <!-- WARN: passing data to Provider.vue -->
-                    <Provider :provider="provider" />
-                  </div>
-                </ScrollArea>
-              </DialogContent>
-            </Dialog>
+              <CardDescription class="flex flex-col">
+                <Badge variant="outline">
+                  <img class="w-4 inline-block" :src="checkMarkIcon" />
+                  Completed {{ provider.jobsCompleted }} Jobs
+                </Badge>
+              </CardDescription>
+              <Dialog>
+                <DialogTrigger as-child>
+                  <Button variant="default" class="mt-3">View Profile</Button>
+                </DialogTrigger>
+                <DialogContent
+                  class="h-full max-h-95/100 max-w-150 p-0 gap-0 m-0"
+                >
+                  <DialogHeader class="sr-only">
+                    <DialogTitle>Provider Profile</DialogTitle>
+                    <DialogDescription
+                      >Full provider profile details</DialogDescription
+                    >
+                  </DialogHeader>
+                  <ScrollArea class="h-full max-h-full">
+                    <div class="p-4">
+                      <!-- WARN: passing data to Provider.vue -->
+                      <Provider :provider="provider" />
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
-        </div>
-        <CardTitle class="w-15 flex flex-col items-center">
-          ${{ provider.price }}
-          <!-- <Badge variant="outline" class="text-base">${{ provider.price }}</Badge> -->
-          <CardDescription>per hour</CardDescription>
-        </CardTitle>
-      </CardHeader>
-      <CardContent class="flex flex-col gap-2">
-        <Separator class="my-2" />
-        <CardTitle
-          ><img class="w-8 inline-block" :src="aboutMeIcon" /> About
-          Me</CardTitle
-        >
-        <span class="line-clamp-4"> {{ provider.aboutMe }} </span>
-        <Separator class="my-2" />
-      </CardContent>
-      <CardFooter class="flex flex-col"> </CardFooter>
-    </Card>
+          <CardTitle class="w-15 flex flex-col items-center">
+            ${{ provider.price }}
+            <!-- <Badge variant="outline" class="text-base">${{ provider.price }}</Badge> -->
+            <CardDescription>per hour</CardDescription>
+          </CardTitle>
+        </CardHeader>
+        <CardContent class="flex flex-col gap-2">
+          <Separator class="my-2" />
+          <CardTitle
+            ><img class="w-8 inline-block" :src="aboutMeIcon" /> About
+            Me</CardTitle
+          >
+          <span class="line-clamp-4"> {{ provider.aboutMe }} </span>
+          <Separator class="my-2" />
+        </CardContent>
+        <CardFooter class="flex flex-col"> </CardFooter>
+      </Card>
+    </div>
   </div>
 </template>
 
