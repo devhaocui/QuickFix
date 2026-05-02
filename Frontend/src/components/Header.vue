@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import LogoImage from "@/assets/icons/logo.png";
 import { Separator } from "@/components/ui/separator";
+// import ModeToggle from "@/components/ModeToggle";
 
 const navigate = (hash) => {
   window.location.hash = hash;
@@ -19,23 +20,26 @@ const navigate = (hash) => {
         <!-- <button class="big-button" @click="navigate('/')">Home</button> -->
         <!-- <button class="big-button" @click="navigate('/Payment')">Payment</button> -->
         <!-- <button class="big-button" @click="navigate('#/Provider')">Provider</button> -->
-        <!-- <button class="big-button" @click="navigate('#/Login')">Login</button> -->
-        <!-- <button class="big-button" @click="navigate('#/Signup')">Signup</button> -->
-        <button class="big-button" @click="navigate('#/Form')">Form</button>
+        <button class="big-button" @click="navigate('#/Login')">Login</button>
+        <button class="big-button" @click="navigate('#/Signup')">Signup</button>
+        <!-- <button class="big-button" @click="navigate('#/Form')">Form</button> -->
         <button class="big-button" @click="navigate('#/Profile')">
           Profile
         </button>
         <button class="big-button" @click="navigate('#/Test')">Test</button>
         <button class="big-button" @click="navigate('#/Temp')">temp</button>
-        <button class="big-button" @click="navigate('#/ProviderList')">
-          ProviderList
-        </button>
+        <!-- <button class="big-button" @click="navigate('#/ProviderList')"> -->
+        <!--   ProviderList -->
+        <!-- </button> -->
         <button class="big-button" @click="navigate('#/FavoriteProvider')">
           FavoriteProvider
         </button>
-        <button class="big-button" @click="navigate('#/Setting')">
-          Setting
-        </button>
+        <!-- <button class="big-button" @click="navigate('#/Setting')"> -->
+        <!--   Setting -->
+        <!-- </button> -->
+        <!-- <button class="big-button" @click="navigate('#/Scheduler')"> -->
+        <!--   Scheduler -->
+        <!-- </button> -->
       </div>
     </header>
     <Separator class="my-3" />
@@ -55,6 +59,7 @@ const navigate = (hash) => {
   --colorShadeC: rgb(150, 232, 195);
   --colorShadeD: rgb(187, 232, 211);
   --colorShadeE: rgb(205, 255, 232);
+  /* --colorShadeE: oklch(0.648 0.2 131.684); */
   font-family: "Open Sans", sans-serif;
 }
 

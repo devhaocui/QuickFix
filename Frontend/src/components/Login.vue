@@ -1,3 +1,4 @@
+<!-- NOTE: Login.vue -->
 <script setup>
 // import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils";
@@ -23,20 +24,17 @@ import { ref } from "vue";
 const emit = defineEmits(["login-success"]);
 const email = ref("");
 const password = ref("");
-
-function quickLogin() {
-  emit("login-success");
-}
+const API = "http://localhost:3000/api/users";
 
 async function login() {
   const $toast = useToast();
-  const response = await fetch("http://localhost:3000/api/users/login", {
+  const response = await fetch(`${API}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: email.value,
+      email: email.value,
       password: password.value,
     }),
   });
@@ -52,15 +50,14 @@ async function login() {
   // sends data to App.vue (our root node)
   emit("login-success");
   let instance = $toast.success(data.message);
-  console.log("Login Success", data.message);
   return data;
 }
 </script>
 
 <template>
-  <div class="login-root flex flex-col gap-6 p-50">
+  <div class="login-root flex flex-col items-center gap-6">
     <!-- <Card class="text-green-900 font-normal"> -->
-    <Card>
+    <Card class="">
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>
         <CardDescription>
@@ -101,9 +98,9 @@ async function login() {
             <Field>
               <!-- <Button type="submit" @click="login"> -->
               <Button type="submit"> Login </Button>
-              <Button variant="outline" type="button">
-                Login with Google
-              </Button>
+              <!-- <Button variant="outline" type="button"> -->
+              <!--   Login with Google -->
+              <!-- </Button> -->
               <FieldDescription class="text-center">
                 Don't have an account?
                 <a href="#/Signup"> Sign up </a>
@@ -113,6 +110,6 @@ async function login() {
         </form>
       </CardContent>
     </Card>
-    <Button @click="quickLogin">Bypass Login</Button>
+    <!-- <Button @click="quickLogin">Bypass Login</Button> -->
   </div>
 </template>

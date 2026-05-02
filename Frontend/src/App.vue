@@ -12,8 +12,8 @@ import Temp from "@/components/Temp.vue";
 import Provider from "@/components/Provider.vue";
 import ProviderList from "@/components/ProviderList.vue";
 import FavoriteProvider from "@/components/FavoriteProvider.vue";
-import Setting from "@/components/Setting.vue";
 import { Toaster } from "@/components/ui/sonner";
+import Scheduler from "@/components/Scheduler.vue";
 
 const routes = {
   "/": Main,
@@ -27,7 +27,7 @@ const routes = {
   // '/Provider': Provider,
   "/ProviderList": ProviderList,
   "/FavoriteProvider": FavoriteProvider,
-  "/Setting": Setting,
+  "/Scheduler": Scheduler,
 };
 
 const isLoggedIn = ref(true);
@@ -48,10 +48,12 @@ const currentView = computed(() => {
 </script>
 
 <template>
+  <!-- NOTE: For dark mode and light mode. It doesn't work well right now. -->
+  <!-- <ModeToggle /> -->
+
   <div class="w-full min-h-screen flex flex-col items-center">
     <Header v-show="isLoggedIn" />
     <div v-if="isLoggedIn" class="w-full flex flex-col items-center">
-      <!-- <div class="m-10"> -->
       <div class="w-full">
         <component :is="currentView" />
       </div>

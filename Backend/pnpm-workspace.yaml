@@ -1,4 +1,0 @@
-ignoredBuiltDependencies: null
-
-onlyBuiltDependencies:
-  - sqlite3

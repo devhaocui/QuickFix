@@ -5,7 +5,7 @@ const year = ref("2026");
 
 <template>
   <footer>
-    <span class="text-gray-500">
+    <span class="text-gray-500 flex flex-col items-center">
       Created By Seal Team Seven @copy {{ year }}</span
     >
   </footer>

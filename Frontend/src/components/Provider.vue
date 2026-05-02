@@ -1,3 +1,4 @@
+<!-- NOTE: Provider.vue -->
 <script setup>
 import {
   Card,
@@ -57,11 +58,7 @@ import {
 } from "@/components/ui/hover-card";
 
 import { ref, computed, watch } from "vue";
-// import workPhoto1 from '@/assets/workPhotos/bathroom.jpg'
-// import workPhoto2 from '@/assets/workPhotos/garden.jpg'
-// import workPhoto3 from '@/assets/workPhotos/kitchen.jpg'
-// import profAvatar from '@/assets/avatars/avatar.png'
-// import defaultAvatar from '@/assets/avatars/defaultAvatar.png'
+import defaultAvatar from "@/assets/avatars/defaultAvatar.png";
 import starIcon from "@/assets/icons/star.png";
 import aboutMeIcon from "@/assets/icons/aboutMe.png";
 import albumIcon from "@/assets/icons/album.png";
@@ -72,10 +69,8 @@ import { Separator } from "@/components/ui/separator";
 import { faker } from "@faker-js/faker";
 import checkMarkIcon from "@/assets/icons/checkMark.png";
 
-//NOTE: Reference Form at 'https://shadcn-vue.com/docs/components/stepper'
-
-//NOTE: grabs data from ProviderList.vue component
 const { provider } = defineProps(["provider"]);
+const emit = defineEmits(["select"]);
 
 const displayedPhotos = computed(() => provider.workPhotos.slice(0, 4));
 const totalRating = provider.ratings.length;
@@ -90,7 +85,6 @@ const chunkUserRating = computed(() => {
   return chunks;
 });
 
-// format date to human readable format
 function formatDate(date) {
   return new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
@@ -99,10 +93,8 @@ function formatDate(date) {
   });
 }
 
-// bool state var for read more and read less.
 const isExpanded = ref(false);
 
-//NOTE: all this to get photo Carousel number update ex. 4th out of 6 photos (4/6)
 const api = ref();
 const totalCount = ref(0);
 const current = ref(0);
@@ -129,11 +121,8 @@ watch(
   { immediate: true },
 );
 
-//BUG: Debugging Area
-console.log(
-  "length of user aboutMe description = " + provider.aboutMe.split(" ").length,
-);
-console.log("showReadMoreButton state = " + showReadMoreButton.value);
+console.log("length of user aboutMe = " + provider.aboutMe.split(" ").length);
+console.log("showReadMoreButton = " + showReadMoreButton.value);
 </script>
 
 <template>
@@ -162,7 +151,11 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
         </div>
         <div class="flex flex-col items-center">
           <CardTitle> ${{ provider.price }} / hr </CardTitle>
-          <Button class="mt-2">Select Me</Button>
+          <Button
+            class="cursor-pointer mt-2 text-md rounded-4xl"
+            @click="emit('select')"
+            >Select</Button
+          >
         </div>
       </CardHeader>
       <CardContent class="flex flex-col gap-2">
@@ -178,7 +171,7 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
           v-if="showReadMoreButton"
           variant="link"
           @click="isExpanded = !isExpanded"
-          class="p-0 text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start"
+          class="cursor-pointer p-0 text-sm text-blue-500 hover:text-blue-700 font-medium mt-1 self-start"
         >
           {{ isExpanded ? "Hide ↑" : "Read More ↓" }}
         </Button>
@@ -187,14 +180,14 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
           <img class="w-8 inline-block" :src="albumIcon" /> Work
           Photos</CardTitle
         >
-        <div id="workPhotos" class="flex">
-          <div v-for="photo in displayedPhotos" class="w-25">
+        <div id="workPhotos" class="flex items-start">
+          <div v-for="photo in displayedPhotos" class="w-25 h-auto">
             <HoverCard :open-delay="50" :close-delay="0">
               <HoverCardTrigger as-child>
                 <AspectRatio :ratio="1 / 1">
                   <img
                     :src="photo"
-                    class="object-cover h-full rounded-lg p-0.5"
+                    class="object-cover w-full h-full rounded-lg p-0.5"
                   />
                 </AspectRatio>
               </HoverCardTrigger>
@@ -206,11 +199,10 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
             </HoverCard>
           </div>
 
-          <!-- NOTE: If provider has more than 4 images, show the Carousel. -->
           <div v-if="provider.workPhotos.length > 4" class="w-25">
             <Dialog>
               <DialogTrigger as-child>
-                <button type="button" class="w-full h-full">
+                <button type="button" class="cursor-pointer w-full h-full">
                   <AspectRatio :ratio="1 / 1">
                     <div class="relative h-full w-full">
                       <img
@@ -230,8 +222,10 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
               </DialogTrigger>
               <DialogContent class="min-w-100 max-w-170 flex justify-center">
                 <DialogHeader>
-                  <DialogTitle></DialogTitle>
-                  <DialogDescription></DialogDescription>
+                  <DialogTitle class="sr-only">Work Photos</DialogTitle>
+                  <DialogDescription class="sr-only"
+                    >Photo carousel</DialogDescription
+                  >
                   <Carousel
                     class="flex flex-col items-center"
                     :opts="{ startIndex: 4, loop: true, duration: 10 }"
@@ -267,7 +261,6 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
         <Separator class="my-2" />
       </CardContent>
 
-      <!-- NOTE: Provider Ratings Section -->
       <CardFooter class="flex flex-col">
         <div class="items-start self-start w-full h-auto">
           <CardTitle
@@ -282,15 +275,12 @@ console.log("showReadMoreButton state = " + showReadMoreButton.value);
           >
             <div class="flex items-center gap-3">
               <Avatar class="mr-1">
-                <AvatarImage :src="rating.userAvatar" />
+                <AvatarImage :src="defaultAvatar" />
                 <AvatarFallback>Img</AvatarFallback>
               </Avatar>
               <div class="flex flex-col">
                 <p class="font-semibold">{{ rating.userName }}</p>
                 <div class="flex items-center gap-0.5">
-                  <!-- NOTE: v-for loops functions fine without :key but the docs recommend it -->
-                  <!-- in case of change of ordering is needed -->
-
                   <img
                     v-for="star in 5"
                     :key="star"

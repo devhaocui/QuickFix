@@ -1,3 +1,4 @@
+<!-- NOTE: ProviderList.vue -->
 <script setup>
 import {
   Card,
@@ -73,13 +74,29 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { faker } from "@faker-js/faker";
 import { Badge } from "@/components/ui/badge";
 import Provider from "@/components/Provider.vue";
+import Scheduler from "@/components/Scheduler.vue";
 
 import { userListStore } from "@/store/userList";
 import { storeToRefs } from "pinia";
 
-// NOTE: grabbing data from pinia from store.js in the /store directory.
 const store = userListStore();
 const { providers } = storeToRefs(store);
+
+const profileOpen = ref({});
+const schedulerOpen = ref(false);
+const selectedProvider = ref(null);
+
+function handleSelect(provider, index) {
+  // WARN: commented out code will be depreciated and refactored.
+  // profileOpen.value[index] = false;
+  // selectedProvider.value = provider;
+  // setTimeout(() => {
+  //   schedulerOpen.value = true;
+  // }, 150);
+  profileOpen.value[index] = false;
+  selectedProvider.value = provider;
+  schedulerOpen.value = true;
+}
 </script>
 
 <template>
@@ -99,37 +116,41 @@ const { providers } = storeToRefs(store);
             <div>
               <CardTitle>{{ provider.name }}</CardTitle>
               <CardDescription class="mt-1">
-                <!-- WARN: unsure whether to make provider reviews also a badge. -->
-                <Badge variant="outline" size="sm">
+                <Badge variant="outline">
                   <img class="w-4 inline-block align-top" :src="starIcon" />
                   {{ provider.averageRating }}
                   ({{ provider.ratings.length }}) reviews
                 </Badge>
               </CardDescription>
 
-              <CardDescription class="flex flex-col">
+              <CardDescription class="flex flex-col items-start">
                 <Badge variant="outline">
                   <img class="w-4 inline-block" :src="checkMarkIcon" />
-                  Completed {{ provider.jobsCompleted }} Jobs
+                  <span>Completed ({{ provider.jobsCompleted }}) Jobs</span>
                 </Badge>
               </CardDescription>
-              <Dialog>
+              <Dialog v-model:open="profileOpen[index]">
                 <DialogTrigger as-child>
-                  <Button variant="default" class="mt-3">View Profile</Button>
+                  <Button
+                    variant="default"
+                    class="cursor-pointer rounded-3xl mt-3"
+                  >
+                    View Profile
+                  </Button>
                 </DialogTrigger>
                 <DialogContent
                   class="h-full max-h-95/100 max-w-150 p-0 gap-0 m-0"
                 >
                   <DialogHeader class="sr-only">
                     <DialogTitle>Provider Profile</DialogTitle>
-                    <DialogDescription
-                      >Full provider profile details</DialogDescription
-                    >
+                    <DialogDescription>Profile details</DialogDescription>
                   </DialogHeader>
                   <ScrollArea class="h-full max-h-full">
                     <div class="p-4">
-                      <!-- WARN: passing data to Provider.vue -->
-                      <Provider :provider="provider" />
+                      <Provider
+                        :provider="provider"
+                        @select="handleSelect(provider, index)"
+                      />
                     </div>
                   </ScrollArea>
                 </DialogContent>
@@ -138,7 +159,6 @@ const { providers } = storeToRefs(store);
           </div>
           <CardTitle class="w-15 flex flex-col items-center">
             ${{ provider.price }}
-            <!-- <Badge variant="outline" class="text-base">${{ provider.price }}</Badge> -->
             <CardDescription>per hour</CardDescription>
           </CardTitle>
         </CardHeader>
@@ -149,11 +169,21 @@ const { providers } = storeToRefs(store);
             Me</CardTitle
           >
           <span class="line-clamp-4"> {{ provider.aboutMe }} </span>
-          <Separator class="my-2" />
         </CardContent>
         <CardFooter class="flex flex-col"> </CardFooter>
       </Card>
     </div>
+
+    <!-- Scheduler dialog — outside the v-for and outside the profile dialog -->
+    <Dialog v-model:open="schedulerOpen">
+      <DialogContent class="max-w-md p-0 border-0">
+        <DialogHeader class="sr-only">
+          <DialogTitle>Schedule</DialogTitle>
+          <DialogDescription>Select a date and time</DialogDescription>
+        </DialogHeader>
+        <Scheduler v-if="selectedProvider" :provider="selectedProvider" />
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 

@@ -9,9 +9,9 @@ import drillImage from "@/assets/icons/drill.png";
 import garden from "@/assets/icons/garden.png";
 
 const showScroll = ref(false);
-const value = ref("");
+const searchBarInput = ref("");
 
-const jobs = [{ name: "Home Maintenance" }, { name: "Gardening" }];
+const jobs = [{ name: "Home Repair" }, { name: "Gardening" }];
 
 // NOTE: first 2 lines of the Main page
 const pageOneText = [
@@ -41,7 +41,7 @@ const featureItems = [
   {
     title: "Background Checks",
     description:
-      "Each independent contractors signs up through our platform will undergo a criminial background check to increase the safety of customers",
+      "Independent contractors sign up through our platform will undergo a criminial background check to increase the safety of customers",
   },
 ];
 
@@ -68,7 +68,7 @@ onMounted(() => {
 });
 
 const filteredJobs = computed(() => {
-  const query = value.value.toLowerCase();
+  const query = searchBarInput.value.toLowerCase();
   return jobs.filter((job) => job.name.toLowerCase().includes(query));
 });
 
@@ -77,26 +77,28 @@ function showScrollState() {
 }
 
 function selectjob(item) {
-  value.value = item.name;
+  searchBarInput.value = item.name;
 }
 
 // WARN: quick and dirty way to re-route in the search bar
 function handleSearch() {
   const match = jobs.find(
-    (job) => job.name.toLowerCase() === value.value.toLowerCase(),
+    (job) => job.name.toLowerCase() === searchBarInput.value.toLowerCase(),
   );
   if (match) {
     window.location.hash = "#/Form";
+  } else {
+    console.log("job does not match");
   }
-  console.log("HandleSearhc() function called");
+  console.log("HandleSearch() function called");
 }
 </script>
 
 <template>
   <div
-    class="flex flex-col items-center mt-30 bg-linear-to-b from-white from-0% via-white-500 via-5% to-green-300 to-100%"
+    class="via-white-500 mt-30 flex flex-col bg-linear-to-b from-white from-0% via-5% to-green-300 to-100%"
   >
-    <main class="w-full flex flex-col items-center justify-center">
+    <main class="flex w-full flex-col items-center justify-center">
       <!-- NOTE: PageOneText — all pop up at once -->
       <div
         class="animate__animated animate__fadeInUp flex flex-col items-center gap-4"
@@ -108,26 +110,32 @@ function handleSearch() {
         </div>
 
         <!-- NOTE: Search Box -->
-        <div class="w-full max-w-sm relative">
+        <div class="relative w-full max-w-sm">
           <div class="mt-10 flex items-center gap-2">
+            <!-- WARN: overriding Input component's text size with !text-lg -->
             <Input
               type="text"
-              v-model="value"
+              v-model="searchBarInput"
               @focus="showScrollState"
               @blur="showScrollState"
               placeholder="What do you need help with?"
-              class="border-2 border-stone-600 rounded-lg"
+              class="rounded-4xl border-2 border-stone-600 pt-5 pb-5 !text-lg text-lg placeholder:text-lg"
             />
-            <Button type="submit" @click="handleSearch">Search</Button>
+            <Button
+              type="submit"
+              class="cursor-pointer rounded-4xl"
+              @click="handleSearch"
+              >Search</Button
+            >
           </div>
-          <div v-if="showScroll" class="absolute mt-1 w-full z-10">
-            <ScrollArea class="h-50 w-full rounded-md bg-background shadow-lg">
-              <div class="p-6 space-y-3">
+          <div v-if="showScroll" class="absolute z-10 mt-1 w-full">
+            <ScrollArea class="bg-background h-50 w-full rounded-md shadow-lg">
+              <div class="space-y-3 p-6">
                 <div
                   v-for="job in filteredJobs"
                   :key="job.name"
                   @mousedown="selectjob(job)"
-                  class="cursor-pointer rounded px-2 py-1 hover:bg-muted transition"
+                  class="hover:bg-muted cursor-pointer rounded px-2 py-1 text-lg transition"
                 >
                   {{ job.name }}
                 </div>
@@ -137,13 +145,11 @@ function handleSearch() {
         </div>
 
         <!-- NOTE: Job Type Buttons/Icons -->
-        <div
-          class="mt-10 flex flex-wrap items-center justify-center scale-[1.8] p-6 rounded-lg"
-        >
+        <div class="mt-10 flex gap-5">
           <div class="flex flex-col items-center">
             <a href="#/Form">
               <Button
-                class="p-1"
+                class="scale-[1.5] cursor-pointer p-1"
                 variant="outline"
                 size="icon"
                 aria-label="Submit"
@@ -151,12 +157,12 @@ function handleSearch() {
                 <img :src="drillImage" />
               </Button>
             </a>
-            <div class="scale-[0.5] mt-1">Home Repair</div>
+            <div class="mt-5">Home Repair</div>
           </div>
           <div class="flex flex-col items-center">
             <a href="#/Form">
               <Button
-                class="p-1"
+                class="scale-[1.5] cursor-pointer p-1"
                 variant="outline"
                 size="icon"
                 aria-label="Submit"
@@ -164,7 +170,7 @@ function handleSearch() {
                 <img :src="garden" />
               </Button>
             </a>
-            <div class="scale-[0.5] mt-1">Gardening</div>
+            <div class="mt-5">Gardening</div>
           </div>
         </div>
       </div>
@@ -173,9 +179,9 @@ function handleSearch() {
     <!-- NOTE: Scroll-triggered feature sections (right to left) -->
     <!-- This lives below the fold — user must scroll to trigger animations -->
     <section
-      class="w-full min-h-screen flex flex-col items-center justify-center px-6 py-20"
+      class="flex min-h-screen w-full flex-col items-center justify-center px-6 py-20"
     >
-      <div class="max-w-2xl w-full flex flex-col gap-10">
+      <div class="flex w-full max-w-2xl flex-col gap-10">
         <div
           v-for="(item, i) in featureItems"
           :key="i"
@@ -188,8 +194,10 @@ function handleSearch() {
           "
           :style="{ animationDelay: `${i * 0.15}s` }"
         >
-          <h3 class="text-2xl font-bold text-green-700">{{ item.title }}</h3>
-          <p class="text-base text-muted-foreground mt-2">
+          <h3 class="text-2xl font-bold text-green-700 drop-shadow-md">
+            {{ item.title }}
+          </h3>
+          <p class="text-muted-foreground mt-2 text-base drop-shadow-md">
             {{ item.description }}
           </p>
         </div>

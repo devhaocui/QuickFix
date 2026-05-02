@@ -1,3 +1,4 @@
+<!-- FavoriteProvider.vue -->
 <script setup>
 import { ref, reactive } from "vue";
 import { Card } from "@/components/ui/card";

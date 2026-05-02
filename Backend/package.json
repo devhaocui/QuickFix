@@ -1,19 +1,16 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "fork repo using express.js and bcrypt",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "sqlite3": "^5.1.7"
+    "mongodb": "^7.1.1",
+    "mongoose": "^9.4.1",
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14"
   }
 }
